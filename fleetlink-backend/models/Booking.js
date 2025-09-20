@@ -1,7 +1,7 @@
-const monggoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const bookingSchema = new monggoose.Schema({
-    vehicleId: { type: monggoose.Schema.Types.ObjectId, ref: 'Vehicle', required: true },
+const bookingSchema = new Schema({
+    vehicleId: { type: Schema.Types.ObjectId, ref: 'Vehicle', required: true },
     fromPincode: { type: String, required: true },
     toPincode: { type: String, required: true },
     startTime: { type: Date, required: true },
@@ -9,4 +9,5 @@ const bookingSchema = new monggoose.Schema({
     customerId: { type: String, required: true },
 });
 
-module.exports = monggoose.model('Booking', bookingSchema);
+const Booking = model('Booking', bookingSchema);
+export default Booking;
