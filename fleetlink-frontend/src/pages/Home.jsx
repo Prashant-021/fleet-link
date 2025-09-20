@@ -22,9 +22,14 @@ const CardItems = [
 
 const Home = () => {
     return (
-        <Row gutter={16}>
+        <Row  gutter={[16, 16]}>
             {CardItems.map((item, index) => (
-                <Col span={8} key={index}>
+                <Col
+                    xs={24}  
+                    sm={24}  
+                    md={12}  
+                    lg={8} 
+                    key={index}>
                     <Link to={item.link}>
                         <Card
                             title={item.title}

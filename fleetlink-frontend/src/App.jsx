@@ -1,23 +1,22 @@
 import React from 'react';
 import { Layout } from 'antd';
-import HeaderComp from '../components/HeaderComp';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const { Content } = Layout;
 
 
-import Home from "../pages/Home";
-import AddVehicle from '../pages/Addvehicle';
-import SearchAndBook from '../pages/SearchAndBook';
-import ViewBookings from '../pages/ViewBookings';
-
+import Home from "./pages/Home";
+import AddVehicle from './pages/AddVehicle';
+import SearchAndBook from './pages/SearchAndBook';
+import ViewBookings from './pages/ViewBookings';
+import HeaderComp from './components/HeaderComp'
 
 const App = () => {
   return (
     <Router>
       <Layout>
         <HeaderComp />
-        <Content style={{ padding: '0 30px' }}>
+        <Content className='px-5 md:px-7'>
           <div
             style={{
               minHeight: "85vh",
