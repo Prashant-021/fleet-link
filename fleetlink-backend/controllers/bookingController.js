@@ -1,6 +1,6 @@
-import Booking from "../models/Booking";
-import Vehicle from "../models/Vehicle";
-import { calcRideDuration } from "../utils/calcRideDuration";
+import Booking from "../models/Booking.js";
+import Vehicle from "../models/Vehicle.js";
+import { calcRideDuration } from "../utils/calcRideDuration.js";
 
 
 export const createBooking = async (req, res) => {

@@ -1,7 +1,7 @@
 
-import Vehicle from '../models/Vehicle';
-import Booking from '../models/Booking';
-import { calcRideDuration } from '../utils/calcRideDuration';
+import Vehicle from '../models/Vehicle.js';
+import Booking from '../models/Booking.js';
+import { calcRideDuration } from '../utils/calcRideDuration.js';
 
 export const addVehicle = async (req, res) => {
     try {
@@ -16,7 +16,7 @@ export const addVehicle = async (req, res) => {
     }
 }
 
-export const getAbailableVehicles = async (req, res) => {
+export const getAvailableVehicles = async (req, res) => {
     try {
         const { capacityRequired, fromPincode, toPincode, startTime } = req.query;
         if (!capacityRequired || !fromPincode || !toPincode || !startTime) {
