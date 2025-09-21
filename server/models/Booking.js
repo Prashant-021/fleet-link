@@ -7,7 +7,7 @@ const bookingSchema = new Schema({
     startTime: { type: Date, required: true },
     endTime: { type: Date, required: true },
     customerId: { type: String, required: true },
-});
+}, { timestamps: true });
 
 const Booking = model('Booking', bookingSchema);
 export default Booking;

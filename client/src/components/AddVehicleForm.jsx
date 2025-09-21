@@ -5,7 +5,6 @@ import { addVehicleAPI } from '../lib/apis';
 const AddVehicleForm = () => {
 
     const onFinish = async (values) => {
-        console.log('Success:', values);
         try {
             let vehicle = {
                 "name": values.Name,
@@ -17,9 +16,6 @@ const AddVehicleForm = () => {
             console.error("Error while adding Vehicle: ", err)
         }
     };
-    const onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
-    };
     return (
         <Form
             name="Add Vehicle"
@@ -27,7 +23,6 @@ const AddVehicleForm = () => {
             initialValues={{ remember: true }}
             onFinish={onFinish}
             layout='vertical'
-            onFinishFailed={onFinishFailed}
             autoComplete="off"
         >
             <Form.Item

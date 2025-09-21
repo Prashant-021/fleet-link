@@ -16,13 +16,13 @@ export const createBooking = async (req, res) => {
         const duration = calcRideDuration(fromPincode, toPincode);
         const start = new Date(startTime);
         const end = new Date(start.getTime() + duration * 60 * 60 * 1000);
-
+        
         const conflict = await Booking.findOne({
             vehicleId,
-            $or: [
-                { startTime: { $lt: end }, endTime: { $gt: start } }
-            ]
+            startTime: { $lt: end },
+            endTime: { $gt: start }
         });
+
         if (conflict) {
             return res.status(409).json({ error: 'Vehicle already Booked in this time slot' })
         }
@@ -36,3 +36,26 @@ export const createBooking = async (req, res) => {
         res.status(500).json({ error: err.message })
     }
 };
+
+export const getBookings = async (req, res) => {
+    try {
+        const bookings = await Booking.find().sort({ createdAt: -1 }).lean().populate('vehicleId') // This replaces vehicleId with full vehicle object
+            .exec();
+        res.json({ bookings })
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+}
+
+export const deleteBooking = async (req, res) => {
+    try {
+        const { bookingId } = req.params;
+        const booking = await Booking.findByIdAndDelete(bookingId);
+        if (!booking) {
+            return res.status(404).json({ message: "Booking not found" });
+        }  
+        res.json({ message: "Booking deleted successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }   
+}
