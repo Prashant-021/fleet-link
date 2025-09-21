@@ -12,8 +12,9 @@ import ViewBookings from './pages/ViewBookings';
 import HeaderComp from './components/HeaderComp'
 
 const App = () => {
+  
   return (
-    <Router>
+    <Router Router >
       <Layout>
         <HeaderComp />
         <Content className='px-5 md:px-7'>

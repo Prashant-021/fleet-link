@@ -22,3 +22,11 @@ export async function getVehicles() {
     if (!res.ok) throw new Error(data?.error || 'Failed to fetch vehicles')
     return data
 }
+
+export async function deleteVehicle(vehicleId) {
+    const res = await fetch(api(`/api/vehicles/delete/${vehicleId}`), {
+        method: 'DELETE',
+    })
+    if (!res.ok) throw new Error('Failed to delete vehicle')
+    return
+}

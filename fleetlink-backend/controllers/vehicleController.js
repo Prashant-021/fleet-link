@@ -16,6 +16,31 @@ export const addVehicle = async (req, res) => {
     }
 }
 
+export const getAllVehicles = async (req, res) => {
+    try {
+        const vehicles = await Vehicle.find().sort({ createdAt: -1 }).lean()
+        res.json({ vehicles })
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+}
+
+export const deleteVehicle = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return res.status(400).json({ message: 'Vehicle ID is required' });
+        }
+        const vehicle = await Vehicle.findByIdAndDelete(id);
+        if (!vehicle) {
+            return res.status(404).json({ message: 'Vehicle not found' });
+        }
+        res.status(204).send();
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+}
+
 export const getAvailableVehicles = async (req, res) => {
     try {
         const { capacityRequired, fromPincode, toPincode, startTime } = req.query;
