@@ -5,6 +5,7 @@ import { Button, DatePicker, Form, Input, InputNumber, Splitter, Typography } fr
 import dayjs from 'dayjs';
 import { createBooking, searchAvailableVehicles } from '../lib/apis';
 import VehicleList from '../components/VehicleList';
+import { showNotification } from '../utils/notifications';
 
 const { Title } = Typography;
 const SearchAndBook = () => {
@@ -12,7 +13,6 @@ const SearchAndBook = () => {
     const [form] = Form.useForm();
 
     const onFinish = async (values) => {
-        console.log('Success:', values);
         try {
             const params = new URLSearchParams({
                 capacityRequired: String(values.capacityRequired || ''),
@@ -32,9 +32,7 @@ const SearchAndBook = () => {
     };
 
     const handleBook = async (vehicle) => {
-        console.log(vehicle, form);
         const formValues = form.getFieldsValue();
-        console.log("Form Data:", formValues);
         try{
             let bookingDetails = {
                 vehicleId: vehicle._id,
@@ -46,9 +44,11 @@ const SearchAndBook = () => {
             }
             let res = await createBooking(bookingDetails)
             console.log(res);
+            showNotification('success', 'Vehicle Booked')
             
         }catch (err) {
-            console.error("Error While Booking Vehicle: ", err)
+            showNotification('error', 'Booking Failed', err.message || 'Unable to book vehicle. Please try again later.')
+            console.log("Error While Booking Vehicle: ", err.message)
         }
     }
     return (
@@ -113,7 +113,7 @@ const SearchAndBook = () => {
                 <Splitter.Panel>
                     <div className="p-4">
                         <Title level={2}>Listed Vehicles</Title>
-                        {availableVehiclesData.estimatedRideDurationHours && <p className='mb-2'><strong>Estimated Ride Duration: </strong>{availableVehiclesData.estimatedRideDurationHours} hrs</p>}
+                        {availableVehiclesData.estimatedRideDurationHours >= 0 && <p className='mb-2'><strong>Estimated Ride Duration: </strong>{availableVehiclesData.estimatedRideDurationHours} hrs</p>}
                         <VehicleList vehicles={availableVehiclesData.availableVehicles} isBookable={true} onBook={(vehicle) => handleBook(vehicle)} />
                     </div>
                 </Splitter.Panel>

@@ -6,6 +6,7 @@ import { Typography } from 'antd';
 import BackButton from '../components/BackButton'
 import VehicleList from '../components/VehicleList';
 import { addVehicleAPI, getVehicles } from '../lib/apis';
+import { showNotification } from '../utils/notifications';
 
 const { Title } = Typography;
 
@@ -36,13 +37,18 @@ const AddVehicle = () => {
                 "tyres": values.tyres
             }
             await addVehicleAPI(vehicle).then(() => loadVehicles());
+            showNotification("success", "Vehicle Added", `${vehicle.name} has been added successfully!`);
         } catch (err) {
             console.error("Error while adding Vehicle: ", err)
+            showNotification("error", "Add Failed", "There was an error adding the vehicle.");
+
         }
         form.resetFields();
     };
     const onFinishFailed = errorInfo => {
         console.log('Failed:', errorInfo);
+        showNotification("warning", "Form Error", "Please fill in all required fields.");
+
     };
     return (
         <div>

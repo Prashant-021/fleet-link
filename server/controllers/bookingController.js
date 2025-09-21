@@ -19,10 +19,11 @@ export const createBooking = async (req, res) => {
 
         const conflict = await Booking.findOne({
             vehicleId,
-            $or: [
-                { startTime: { $lt: end }, endTime: { $gt: start } }
-            ]
+            startTime: { $lt: end },
+            endTime: { $gt: start }
         });
+        console.log(conflict);
+
         if (conflict) {
             return res.status(409).json({ error: 'Vehicle already Booked in this time slot' })
         }

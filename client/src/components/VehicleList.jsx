@@ -1,15 +1,19 @@
 import React from 'react'
 import { Button, Card, Popconfirm } from 'antd'
 import { deleteVehicle } from '../lib/apis';
+import { showNotification } from '../utils/notifications';
 
 const VehicleList = ({ vehicles, reloadVehicles, isEdit = false ,isBookable = false, onBook}) => {
   const confirm = async (vehicleId) => {
     console.log("Delete vehicle with id: ", vehicleId);
     try {
       await deleteVehicle(vehicleId);
+      showNotification("success", "Vehicle Deleted", "The vehicle has been deleted successfully.");
+
       reloadVehicles();
     } catch (err) {
       console.error("Error while deleting vehicle: ", err)
+      showNotification("error", "Delete Failed", "There was an error deleting the vehicle.");
     }
   };
   const cancel = e => {
