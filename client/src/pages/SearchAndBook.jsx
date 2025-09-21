@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
 import BackButton from '../components/BackButton'
-import { Button, DatePicker, Form, Input, InputNumber, Splitter, Typography } from 'antd'
+import { Button, DatePicker, Empty, Form, Input, InputNumber, Splitter, Typography } from 'antd'
 
 import dayjs from 'dayjs';
 import { createBooking, searchAvailableVehicles } from '../lib/apis';
 import VehicleList from '../components/VehicleList';
 import { showNotification } from '../utils/notifications';
+import { CarOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 const SearchAndBook = () => {
-    const [availableVehiclesData, setAvailableVehiclesData] = useState([])
+    const [availableVehiclesData, setAvailableVehiclesData] = useState({ availableVehicles: null, estimatedRideDurationHours: -1 });
     const [form] = Form.useForm();
 
-    const onFinish = async (values) => {
+    const fetchAvailableVehicles = async (values) => {
         try {
             const params = new URLSearchParams({
                 capacityRequired: String(values.capacityRequired || ''),
@@ -21,19 +22,23 @@ const SearchAndBook = () => {
                 startTime: new Date(values.startDateTime).toISOString()
             })
             let data = await searchAvailableVehicles(params);
-            console.log(data);
             setAvailableVehiclesData(data)
         } catch (err) {
             console.error("Error while adding Vehicle: ", err)
+            showNotification('error', 'Failed to find vehicle', 'Unable to find vehicle. Please try again later.')
         }
+    }
+    const onFinish = async (values) => {
+        fetchAvailableVehicles(values);
     };
     const onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
+        showNotification('error', 'Failed to find vehicle', errorInfo || 'Unable to find vehicle. Please try again later.')
+
     };
 
     const handleBook = async (vehicle) => {
         const formValues = form.getFieldsValue();
-        try{
+        try {
             let bookingDetails = {
                 vehicleId: vehicle._id,
                 fromPincode: formValues.fromPincode,
@@ -42,13 +47,11 @@ const SearchAndBook = () => {
                 startTime: formValues.startDateTime,
 
             }
-            let res = await createBooking(bookingDetails)
-            console.log(res);
+            await createBooking(bookingDetails)
             showNotification('success', 'Vehicle Booked')
-            
-        }catch (err) {
+            fetchAvailableVehicles(formValues);
+        } catch (err) {
             showNotification('error', 'Booking Failed', err.message || 'Unable to book vehicle. Please try again later.')
-            console.log("Error While Booking Vehicle: ", err.message)
         }
     }
     return (
@@ -62,7 +65,7 @@ const SearchAndBook = () => {
                             form={form}
                             name="Search Vehicle"
                             title='Search Vehicle'
-                            initialValues={{ name: '', capacityKg: 0, tyres: 0 }}
+                            initialValues={{ capacityRequired: 0, fromPincode: 0, toPincode: 0, startDateTime: dayjs() }}
                             onFinish={onFinish}
                             layout='vertical'
                             onFinishFailed={onFinishFailed}
@@ -71,7 +74,7 @@ const SearchAndBook = () => {
                             <Form.Item
                                 label="Capacity Required Kg)"
                                 name="capacityRequired"
-                                rules={[{ required: true, type: 'number', min: 0, max: 999 }]}
+                                rules={[{ required: true, type: 'number', min: 0, max: 99999 }]}
                             >
                                 <InputNumber className='w-full' />
                             </Form.Item>
@@ -114,6 +117,7 @@ const SearchAndBook = () => {
                     <div className="p-4">
                         <Title level={2}>Listed Vehicles</Title>
                         {availableVehiclesData.estimatedRideDurationHours >= 0 && <p className='mb-2'><strong>Estimated Ride Duration: </strong>{availableVehiclesData.estimatedRideDurationHours} hrs</p>}
+                        {!availableVehiclesData.availableVehicles && "Fill the form to see available vehicles"}
                         <VehicleList vehicles={availableVehiclesData.availableVehicles} isBookable={true} onBook={(vehicle) => handleBook(vehicle)} />
                     </div>
                 </Splitter.Panel>

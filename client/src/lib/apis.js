@@ -28,7 +28,8 @@ export async function deleteVehicle(vehicleId) {
     const res = await fetch(api(`/api/vehicles/delete/${vehicleId}`), {
         method: 'DELETE',
     })
-    if (!res.ok) throw new Error('Failed to delete vehicle')
+    const data = await res.json()
+    if (!res.ok) throw new Error(data?.message || 'Failed to delete vehicle')
     return
 }
 
@@ -57,4 +58,13 @@ export async function getBookings() {
     const data = await res.json()
     if (!res.ok) throw new Error(data?.error || 'Failed to fetch bookings')
     return data
+}
+
+export async function deleteBooking(bookingId) {
+    const res = await fetch(api(`/api/bookings/delete/${bookingId}`), {
+        method: 'DELETE',
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data?.message || 'Failed to delete booking')
+    return
 }

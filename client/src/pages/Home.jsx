@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const CardItems = [
     {
         title: "Add Vehicle",
-        content: "Register a new vehicle in the system by providing details like model, registration number, and availability.",
+        content: "Register a new vehicle in the system by providing details like name, capacity, and tyres.",
         link: "/add-vehicle",
     },
     {

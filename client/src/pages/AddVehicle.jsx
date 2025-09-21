@@ -12,7 +12,7 @@ const { Title } = Typography;
 
 const AddVehicle = () => {
 
-    const [vehicles, setVehicles] = useState([]);
+    const [vehicles, setVehicles] = useState(null);
     const [form] = Form.useForm();
 
     useEffect(() => {
@@ -29,7 +29,6 @@ const AddVehicle = () => {
     }
 
     const onFinish = async (values) => {
-        console.log('Success:', values);
         try {
             let vehicle = {
                 "name": values.Name,
@@ -45,11 +44,6 @@ const AddVehicle = () => {
         }
         form.resetFields();
     };
-    const onFinishFailed = errorInfo => {
-        console.log('Failed:', errorInfo);
-        showNotification("warning", "Form Error", "Please fill in all required fields.");
-
-    };
     return (
         <div>
             <BackButton />
@@ -64,7 +58,6 @@ const AddVehicle = () => {
                             initialValues={{ name: '', capacityKg: 0, tyres: 0 }}
                             onFinish={onFinish}
                             layout='vertical'
-                            onFinishFailed={onFinishFailed}
                             autoComplete="off"
                         >
                             <Form.Item
@@ -77,14 +70,14 @@ const AddVehicle = () => {
                             <Form.Item
                                 label="Capacity(Kg)"
                                 name="capacityKg"
-                                rules={[{ required: true, type: 'number', min: 0, max: 999 }]}
+                                rules={[{ required: true, type: 'number', min: 0, max: 9999 }]}
                             >
                                 <InputNumber className='w-full' />
                             </Form.Item>
                             <Form.Item
                                 label="Tyres"
                                 name="tyres"
-                                rules={[{ required: true, type: 'number', min: 0, max: 999 }]}
+                                rules={[{ required: true, type: 'number', min: 0, max: 9999 }]}
                             >
                                 <InputNumber />
                             </Form.Item>
@@ -99,6 +92,7 @@ const AddVehicle = () => {
                 <Splitter.Panel>
                     <div className="p-4">
                         <Title level={2}>Listed Vehicles</Title>
+                        {!vehicles && "Fill form to Add new Vehicle"}
                         {vehicles && <VehicleList vehicles={vehicles} isEdit={true} reloadVehicles={loadVehicles} />}
                     </div>
                 </Splitter.Panel>

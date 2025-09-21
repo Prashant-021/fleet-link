@@ -31,6 +31,12 @@ export const deleteVehicle = async (req, res) => {
         if (!id) {
             return res.status(400).json({ message: 'Vehicle ID is required' });
         }
+
+        const booking = await Booking.findOne({ vehicleId: id });
+        if (booking) {
+            return res.status(400).json({ message: 'Vehicle is currently booked and cannot be deleted' });
+        }
+
         const vehicle = await Vehicle.findByIdAndDelete(id);
         if (!vehicle) {
             return res.status(404).json({ message: 'Vehicle not found' });
@@ -60,12 +66,15 @@ export const getAvailableVehicles = async (req, res) => {
                 { startTime: { $lt: end }, endTime: { $gt: start } }
             ]
         }).distinct("vehicleId")
-
-        vehicles = vehicles.filter(v => !bookedVehicles.includes(v._id.toString()));
-
+        console.log(bookedVehicles);
+        const bookedIds = bookedVehicles.map(id => id.toString());
+        const vehiclesWithBookingStatus = vehicles.map(v => ({
+            ...v.toObject(),
+            isBooked: bookedIds.includes(v._id.toString())
+        }));
         res.json({
             estimatedRideDurationHours: duration,
-            availableVehicles: vehicles
+            availableVehicles: vehiclesWithBookingStatus
         });
     } catch (err) {
         res.status(500).json({ error: err.message })
