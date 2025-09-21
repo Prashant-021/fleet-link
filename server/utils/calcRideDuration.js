@@ -1,4 +1,5 @@
 export function calcRideDuration(fromPincode, toPincode) {
-    const duration = Math.abs(parseInt(fromPincode) - parseInt(toPincode) % 24)
+    const diff = Math.abs(parseInt(fromPincode) - parseInt(toPincode))
+    const duration = diff % 24
     return duration || 0
 } 

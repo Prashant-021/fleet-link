@@ -93,7 +93,7 @@ const AddVehicle = () => {
                 <Splitter.Panel>
                     <div className="p-4">
                         <Title level={2}>Listed Vehicles</Title>
-                        {vehicles && <VehicleList vehicles={vehicles} reloadVehicles={loadVehicles} />}
+                        {vehicles && <VehicleList vehicles={vehicles} isEdit={true} reloadVehicles={loadVehicles} />}
                     </div>
                 </Splitter.Panel>
             </Splitter>

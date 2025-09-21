@@ -5,30 +5,31 @@ import { Link } from 'react-router-dom';
 const CardItems = [
     {
         title: "Add Vehicle",
-        content: "This is the content of Card 1",
+        content: "Register a new vehicle in the system by providing details like model, registration number, and availability.",
         link: "/add-vehicle",
     },
     {
         title: "Search And Book",
-        content: "This is the content of Card 2",
+        content: "Find available vehicles based on your location and schedule, and book them instantly for your travel needs.",
         link: "/search-and-book",
     },
     {
         title: "View Bookings",
-        content: "This is the content of Card 3",
+        content: "See all your current and past bookings with details such as dates, routes, and assigned vehicles.",
         link: "/view-bookings",
     },
 ];
 
+
 const Home = () => {
     return (
-        <Row  gutter={[16, 16]}>
+        <Row gutter={[16, 16]}>
             {CardItems.map((item, index) => (
                 <Col
-                    xs={24}  
-                    sm={24}  
-                    md={12}  
-                    lg={8} 
+                    xs={24}
+                    sm={24}
+                    md={12}
+                    lg={8}
                     key={index}>
                     <Link to={item.link}>
                         <Card

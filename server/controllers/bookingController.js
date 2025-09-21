@@ -36,3 +36,13 @@ export const createBooking = async (req, res) => {
         res.status(500).json({ error: err.message })
     }
 };
+
+export const getBookings = async (req, res) => {
+    try {
+        const bookings = await Booking.find().sort({ createdAt: -1 }).lean().populate('vehicleId') // This replaces vehicleId with full vehicle object
+            .exec();
+        res.json({ bookings })
+    } catch (err) {
+        res.status(500).json({ error: err.message })
+    }
+}

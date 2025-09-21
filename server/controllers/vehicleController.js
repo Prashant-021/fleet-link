@@ -63,10 +63,10 @@ export const getAvailableVehicles = async (req, res) => {
 
         vehicles = vehicles.filter(v => !bookedVehicles.includes(v._id.toString()));
 
-        res.json(vehicles.map(v => ({
-            ...v.toObject(),
-            estimatedRideDurationHours: duration
-        })));
+        res.json({
+            estimatedRideDurationHours: duration,
+            availableVehicles: vehicles
+        });
     } catch (err) {
         res.status(500).json({ error: err.message })
     }
